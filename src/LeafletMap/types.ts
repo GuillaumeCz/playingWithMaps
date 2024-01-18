@@ -1,6 +1,10 @@
-interface ICoordinate {
+interface IPosition {
   lat: number;
-  long: number;
+  lng: number;
 }
 
-export type { ICoordinate };
+interface ILeafletMapProps {
+  coordinate: IPosition;
+}
+
+export type { ILeafletMapProps, IPosition };
