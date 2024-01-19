@@ -5,8 +5,8 @@ import {
   Marker,
   TileLayer,
 } from "react-leaflet";
-import React, { useRef, useMemo } from "react";
-import { ILeafletMapProps, IPosition } from "./types";
+import React, { useRef, useMemo, Dispatch, SetStateAction } from "react";
+import { IPosition } from "../../../types";
 
 import "./LeafletMap.css";
 
@@ -15,6 +15,12 @@ interface ILayer {
   isDefault: boolean;
   attribution: string;
   url: string;
+}
+
+interface ILeafletMapProps {
+  coordinate: IPosition;
+  onPositionChange: Dispatch<SetStateAction<IPosition>>;
+  radius: number;
 }
 
 const LeafletMap = ({

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getElevation } from "../../../api/altiApi";
-import { IPosition } from "../LeafletMap/types";
+import { IPosition } from "../../../types";
 import { Slider } from "@mui/material";
 
 import "./leafletMapCtrl.css";

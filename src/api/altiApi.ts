@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IPosition } from "../pages/LeafletPage/LeafletMap/types";
+import { IPosition } from "../types";
 const getElevation = async (position: IPosition): Promise<number> => {
   const { lat, lng }: IPosition = position;
   try {

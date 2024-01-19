@@ -1,4 +1,4 @@
-import { IPosition } from "./LeafletMap/types";
+import { IPosition } from "../../types";
 import LeafletMap from "./LeafletMap";
 import LeafletMapCtrl from "./LeafletMapCtrl";
 import { useState } from "react";
