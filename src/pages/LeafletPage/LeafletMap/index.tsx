@@ -18,15 +18,17 @@ interface ILayer {
 }
 
 interface ILeafletMapProps {
-  coordinate: IPosition;
+  position: IPosition;
   onPositionChange: Dispatch<SetStateAction<IPosition>>;
   radius: number;
+  isRadiusVisible: boolean;
 }
 
 const LeafletMap = ({
-  coordinate: position,
+  position,
   onPositionChange,
   radius,
+  isRadiusVisible,
 }: ILeafletMapProps) => {
   const markerRef = useRef(null);
 
@@ -79,11 +81,13 @@ const LeafletMap = ({
           draggable
           eventHandlers={handleMarkerDragged}
         />
-        <Circle
-          center={[lat, lng]}
-          pathOptions={{ color: "red" }}
-          radius={radius}
-        />
+        {isRadiusVisible && (
+          <Circle
+            center={[lat, lng]}
+            pathOptions={{ color: "red" }}
+            radius={radius}
+          />
+        )}
       </MapContainer>
     </>
   );

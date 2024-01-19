@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getElevation } from "../../../api/altiApi";
 import { IPosition } from "../../../types";
-import { Slider } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 
 import "./leafletMapCtrl.css";
 
@@ -9,11 +9,15 @@ interface ILeafletMapCtrlProps {
   position: IPosition;
   radius: number;
   onRadiusChange: Dispatch<SetStateAction<number>>;
+  isRadiusVisible: boolean;
+  setIsRadiusVisible: Dispatch<SetStateAction<boolean>>;
 }
 const LeafletMapCtrl = ({
   position,
   radius,
   onRadiusChange,
+  isRadiusVisible,
+  setIsRadiusVisible,
 }: ILeafletMapCtrlProps) => {
   const { lat, lng } = position;
   const [elevation, setElevation] = useState<number>(0);
@@ -31,8 +35,20 @@ const LeafletMapCtrl = ({
     <div id={"leaflet-ctrl"}>
       Elevation: {elevation} m
       <div className={"leaflet-map-slider"}>
-        <div>Radius: {radius} m</div>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isRadiusVisible}
+                onChange={() => setIsRadiusVisible(!isRadiusVisible)}
+              />
+            }
+            label={"Show radius ?"}
+          />
+        </FormGroup>
+        {isRadiusVisible && <div>Radius: {radius} m</div>}
         <Slider
+          disabled={!isRadiusVisible}
           value={radius}
           step={10}
           marks

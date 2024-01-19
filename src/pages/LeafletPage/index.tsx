@@ -13,18 +13,22 @@ const LeafletMapPage = () => {
 
   const [position, setPosition] = useState<IPosition>(initialPosition);
   const [radius, setRadius] = useState<number>(10);
+  const [isRadiusVisible, setIsRadiusVisible] = useState<boolean>(false);
 
   return (
     <>
       <h1>Leaflet</h1>
       <div id={"leaflet"}>
         <LeafletMap
-          coordinate={position}
+          position={position}
           onPositionChange={setPosition}
           radius={radius}
+          isRadiusVisible={isRadiusVisible}
         />
         <LeafletMapCtrl
           position={position}
+          isRadiusVisible={isRadiusVisible}
+          setIsRadiusVisible={setIsRadiusVisible}
           radius={radius}
           onRadiusChange={setRadius}
         />
