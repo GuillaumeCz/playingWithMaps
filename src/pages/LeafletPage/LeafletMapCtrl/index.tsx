@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
-import { getElevations } from "../../../api/altiApi";
-import { IPoint } from "../../../types";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { getElevationProfile, getElevations } from "../../../api/altiApi";
+import { IElevation, IPoint } from "../../../types";
 import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 
 import "./leafletMapCtrl.css";
@@ -10,6 +10,9 @@ interface ILeafletMapCtrlProps {
   onPointChange: Dispatch<SetStateAction<IPoint[]>>;
 }
 const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
+  const [elevationProfile, setElevationProfile] = useState<IElevation[]>([]);
+
+  // Pas ouf mais rien trouvé de mieux pour check si ces parametres là on changés (dans le tableau d'objets)
   const locationsTrigger = points
     .map(({ location }) => location)
     .reduce((acc, { lat, lng }) => {
@@ -31,6 +34,16 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
     fetchData().catch(console.error);
     // eslint-disable-next-line
   }, [locationsTrigger, onPointChange]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setElevationProfile(
+        await getElevationProfile(points.map(({ location }) => location)),
+      );
+    };
+
+    fetchData().catch(console.error);
+  }, [locationsTrigger]);
 
   return (
     <div id={"leaflet-ctrl"}>

@@ -11,4 +11,11 @@ interface IPoint {
   elevation?: number;
 }
 
-export type { IPoint, IPosition };
+interface IElevation {
+  lat: number;
+  lng: number;
+  z: number;
+  acc: number;
+}
+
+export type { IPoint, IPosition, IElevation };
