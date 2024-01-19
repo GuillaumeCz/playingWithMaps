@@ -3,7 +3,7 @@ import "./App.css";
 import Template from "./ template/Template";
 import { RouteObject, useRoutes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import LeafletMapPage from "./pages/LeafletMapPage";
+import LeafletMapPage from "./pages/LeafletPage";
 
 const App = () => {
   const pages: RouteObject[] = [

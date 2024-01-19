@@ -1,0 +1,4 @@
+#leaflet {
+    display: flex;
+    flex-direction: row;
+}

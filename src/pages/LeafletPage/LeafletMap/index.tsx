@@ -1,17 +1,14 @@
 import {
-  CircleMarker,
+  Circle,
   LayersControl,
   MapContainer,
   Marker,
   TileLayer,
-  WMSTileLayer,
 } from "react-leaflet";
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, { useRef, useMemo } from "react";
 import { ILeafletMapProps, IPosition } from "./types";
 
 import "./LeafletMap.css";
-import { Slider } from "@mui/material";
-import { getElevation } from "../api/altiApi";
 
 interface ILayer {
   name: string;
@@ -20,33 +17,21 @@ interface ILayer {
   url: string;
 }
 
-const LeafletMap = (props: ILeafletMapProps) => {
-  const { coordinate } = props;
-
+const LeafletMap = ({
+  coordinate: position,
+  onPositionChange,
+  radius,
+}: ILeafletMapProps) => {
   const markerRef = useRef(null);
-
-  const [position, setPosition] = useState<IPosition>(coordinate);
-  const [radius, setRadius] = useState<number>(10);
-  const [elevation, setElevation] = useState<number>(0);
-
-  useEffect(() => {
-    let ignore: boolean = false;
-    getElevation(position).then((elev) => {
-      if (!ignore) setElevation(elev);
-    });
-    return () => {
-      ignore = true;
-    };
-  }, [position]);
 
   const handleMarkerDragged = useMemo(
     () => ({
       dragend() {
         const marker: any = markerRef.current;
-        if (marker != null) setPosition(marker.getLatLng());
+        if (marker != null) onPositionChange(marker.getLatLng());
       },
     }),
-    [],
+    [onPositionChange],
   );
 
   const { lat, lng }: IPosition = position;
@@ -68,20 +53,6 @@ const LeafletMap = (props: ILeafletMapProps) => {
 
   return (
     <>
-      Elevation: {elevation} m
-      <div className={"leaflet-map-slider"}>
-        <div>Radius:</div>
-        <Slider
-          value={radius}
-          step={10}
-          marks
-          min={10}
-          max={200}
-          valueLabelDisplay={"auto"}
-          onChange={(e, value) => setRadius(value as number)}
-        />
-      </div>
-      <div>Position: {`${lat}, ${lng}`}</div>
       <MapContainer center={[lat, lng]} zoom={16} id={"map"}>
         <LayersControl>
           {layers.map(
@@ -102,7 +73,7 @@ const LeafletMap = (props: ILeafletMapProps) => {
           draggable
           eventHandlers={handleMarkerDragged}
         />
-        <CircleMarker
+        <Circle
           center={[lat, lng]}
           pathOptions={{ color: "red" }}
           radius={radius}
