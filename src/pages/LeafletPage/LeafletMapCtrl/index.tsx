@@ -4,6 +4,7 @@ import { IElevation, IPoint } from "../../../types";
 import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 
 import "./leafletMapCtrl.css";
+import { LineChart } from "@mui/x-charts";
 
 interface ILeafletMapCtrlProps {
   points: Array<IPoint>;
@@ -43,6 +44,7 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
     };
 
     fetchData().catch(console.error);
+    // eslint-disable-next-line
   }, [locationsTrigger]);
 
   return (
@@ -103,6 +105,17 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
           </div>
         ),
       )}
+      <LineChart
+        xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }]}
+        series={[
+          {
+            data: elevationProfile.map((elevation) => elevation.z),
+            area: true,
+          },
+        ]}
+        width={500}
+        height={500}
+      />
     </div>
   );
 };
