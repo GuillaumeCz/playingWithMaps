@@ -1,14 +1,9 @@
-import {
-  Circle,
-  LayersControl,
-  MapContainer,
-  Marker,
-  TileLayer,
-} from "react-leaflet";
-import React, { useRef, useMemo, Dispatch, SetStateAction } from "react";
-import { IPosition } from "../../../types";
+import { Circle, LayersControl, MapContainer, TileLayer } from "react-leaflet";
+import React, { Dispatch, SetStateAction } from "react";
+import { IPoint, IPosition } from "../../../types";
 
 import "./LeafletMap.css";
+import DraggableMarker from "./DraggableMarker";
 
 interface ILayer {
   name: string;
@@ -18,32 +13,16 @@ interface ILayer {
 }
 
 interface ILeafletMapProps {
-  position: IPosition;
-  onPositionChange: Dispatch<SetStateAction<IPosition>>;
-  radius: number;
-  isRadiusVisible: boolean;
+  mapCenter: IPosition;
+  points: Array<IPoint>;
+  onPointsChange: Dispatch<SetStateAction<Array<IPoint>>>;
 }
 
 const LeafletMap = ({
-  position,
-  onPositionChange,
-  radius,
-  isRadiusVisible,
+  mapCenter,
+  points,
+  onPointsChange,
 }: ILeafletMapProps) => {
-  const markerRef = useRef(null);
-
-  const handleMarkerDragged = useMemo(
-    () => ({
-      dragend() {
-        const marker: any = markerRef.current;
-        if (marker != null) onPositionChange(marker.getLatLng());
-      },
-    }),
-    [onPositionChange],
-  );
-
-  const { lat, lng }: IPosition = position;
-
   const layers: ILayer[] = [
     {
       name: "OpenStreetMap",
@@ -59,9 +38,20 @@ const LeafletMap = ({
     },
   ];
 
+  const updatePoint = (updatedPointId: number, newPosValue: IPosition) =>
+    onPointsChange(
+      points.map(({ id, location, ...rest }) => ({
+        id,
+        location: updatedPointId === id ? newPosValue : location,
+        ...rest,
+      })),
+    );
+
+  const { lat: mapCenterLat, lng: mapCenterLng } = mapCenter;
+
   return (
     <>
-      <MapContainer center={[lat, lng]} zoom={16} id={"map"}>
+      <MapContainer center={[mapCenterLat, mapCenterLng]} zoom={16} id={"map"}>
         <LayersControl>
           {layers.map(
             ({ name, attribution, url, isDefault }: ILayer, index: number) => (
@@ -75,19 +65,31 @@ const LeafletMap = ({
             ),
           )}
         </LayersControl>
-        <Marker
-          ref={markerRef}
-          position={[lat, lng]}
-          draggable
-          eventHandlers={handleMarkerDragged}
-        />
-        {isRadiusVisible && (
-          <Circle
-            center={[lat, lng]}
-            pathOptions={{ color: "red" }}
-            radius={radius}
-          />
-        )}
+        {points.map((point: IPoint) => {
+          const {
+            id,
+            isRadiusVisible,
+            location: { lat, lng },
+            radius,
+          } = point;
+          return (
+            <div key={id}>
+              <DraggableMarker
+                point={point}
+                onPositionChange={(newPointLocation: IPosition) =>
+                  updatePoint(id, newPointLocation)
+                }
+              />
+              {isRadiusVisible && (
+                <Circle
+                  center={[lat, lng]}
+                  pathOptions={{ color: "red" }}
+                  radius={radius}
+                />
+              )}
+            </div>
+          );
+        })}
       </MapContainer>
     </>
   );

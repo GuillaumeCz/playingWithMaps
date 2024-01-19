@@ -1,4 +1,4 @@
-import { IPosition } from "../../types";
+import { IPoint, IPosition } from "../../types";
 import LeafletMap from "./LeafletMap";
 import LeafletMapCtrl from "./LeafletMapCtrl";
 import { useState } from "react";
@@ -11,27 +11,32 @@ const LeafletMapPage = () => {
     lng: 6.65187,
   };
 
-  const [position, setPosition] = useState<IPosition>(initialPosition);
-  const [radius, setRadius] = useState<number>(10);
-  const [isRadiusVisible, setIsRadiusVisible] = useState<boolean>(false);
+  const initialPoint: IPoint = {
+    id: 1,
+    location: initialPosition,
+    isRadiusVisible: false,
+    radius: 10,
+    elevation: 0,
+  };
+
+  const [points, setPoints] = useState<Array<IPoint>>([
+    initialPoint,
+    {
+      ...initialPoint,
+      id: 2,
+    },
+  ]);
 
   return (
     <>
       <h1>Leaflet</h1>
       <div id={"leaflet"}>
         <LeafletMap
-          position={position}
-          onPositionChange={setPosition}
-          radius={radius}
-          isRadiusVisible={isRadiusVisible}
+          points={points}
+          onPointsChange={setPoints}
+          mapCenter={initialPosition}
         />
-        <LeafletMapCtrl
-          position={position}
-          isRadiusVisible={isRadiusVisible}
-          setIsRadiusVisible={setIsRadiusVisible}
-          radius={radius}
-          onRadiusChange={setRadius}
-        />
+        <LeafletMapCtrl points={points} onPointChange={setPoints} />
       </div>
     </>
   );

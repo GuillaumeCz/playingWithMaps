@@ -22,7 +22,7 @@ const Template = () => {
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map(({ route, title }) => (
-                <Link to={route}>
+                <Link to={route} key={title}>
                   <Button
                     key={title}
                     sx={{ my: 2, color: "white", display: "block" }}

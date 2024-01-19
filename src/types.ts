@@ -3,4 +3,12 @@ interface IPosition {
   lng: number;
 }
 
-export type { IPosition };
+interface IPoint {
+  id: number;
+  location: IPosition;
+  isRadiusVisible: boolean;
+  radius: number;
+  elevation?: number;
+}
+
+export type { IPoint, IPosition };

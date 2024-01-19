@@ -1,15 +1,30 @@
 import axios from "axios";
 import { IPosition } from "../types";
-const getElevation = async (position: IPosition): Promise<number> => {
-  const { lat, lng }: IPosition = position;
+
+const getElevations = async (
+  locations: Array<IPosition>,
+): Promise<number[]> => {
+  const payload = locations
+    .map(({ lat, lng }) => ({
+      lat: lat.toString().substring(0, 7),
+      lng: lng.toString().substring(0, 7),
+    }))
+    .reduce(
+      (acc, curr, i) => ({
+        lat: i === 0 ? curr.lat : acc.lat + "|" + curr.lat,
+        lng: i === 0 ? curr.lng : acc.lng + "|" + curr.lng,
+      }),
+      { lat: "", lng: "" },
+    );
+
   try {
     const response = await axios.get(
-      `https://data.geopf.fr/altimetrie/1.0/calcul/alti/rest/elevation.json?lon=${lng}&lat=${lat}&resource=ign_rge_alti_wld&delimiter=;&indent=true&measures=true&zonly=false`,
+      `https://wxs.ign.fr/calcul/alti/rest/elevation.json?lon=${payload.lng}&lat=${payload.lat}&zonly=true`,
     );
-    return response.data.elevations[0].z;
+    return response.data.elevations;
   } catch (e) {
-    return -1;
+    return locations.map(() => -1);
   }
 };
 
-export { getElevation };
+export { getElevations };
