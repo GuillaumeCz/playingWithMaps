@@ -1,9 +1,16 @@
-import { Circle, LayersControl, MapContainer, TileLayer } from "react-leaflet";
+import {
+  Circle,
+  LayersControl,
+  MapContainer,
+  Polyline,
+  TileLayer,
+} from "react-leaflet";
 import React, { Dispatch, SetStateAction } from "react";
 import { IPoint, IPosition } from "../../../types";
 
 import "./LeafletMap.css";
 import DraggableMarker from "./DraggableMarker";
+import { LatLng } from "leaflet";
 
 interface ILayer {
   name: string;
@@ -49,6 +56,14 @@ const LeafletMap = ({
 
   const { lat: mapCenterLat, lng: mapCenterLng } = mapCenter;
 
+  const lineLocation: LatLng[] =
+    points.length > 1
+      ? points.map(
+          ({ location: { lat, lng }, elevation }) =>
+            new LatLng(lat, lng, elevation),
+        )
+      : [];
+
   return (
     <>
       <MapContainer center={[mapCenterLat, mapCenterLng]} zoom={16} id={"map"}>
@@ -90,6 +105,7 @@ const LeafletMap = ({
             </div>
           );
         })}
+        {lineLocation.length && <Polyline positions={lineLocation} />}
       </MapContainer>
     </>
   );
