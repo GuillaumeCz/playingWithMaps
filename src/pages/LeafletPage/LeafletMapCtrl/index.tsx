@@ -5,6 +5,7 @@ import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 
 import "./leafletMapCtrl.css";
 import { LineChart } from "@mui/x-charts";
+import { LatLng, LatLngBounds } from "leaflet";
 
 interface ILeafletMapCtrlProps {
   points: Array<IPoint>;
@@ -46,6 +47,12 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
     fetchData().catch(console.error);
     // eslint-disable-next-line
   }, [locationsTrigger]);
+
+  // Meilleur moyen pour choper la distance ? Reflechir a faire ça en 1 expression, 1 shot
+  const formattedPoints: LatLng[] = points.map(
+    ({ location: { lat, lng }, elevation }) => new LatLng(lat, lng, elevation),
+  );
+  const distance = formattedPoints[0].distanceTo(formattedPoints[1]);
 
   return (
     <div id={"leaflet-ctrl"}>
@@ -105,6 +112,7 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
           </div>
         ),
       )}
+      {distance && <div>Distance: {distance.toString().substring(0, 7)} m</div>}
       <LineChart
         xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }]}
         series={[
