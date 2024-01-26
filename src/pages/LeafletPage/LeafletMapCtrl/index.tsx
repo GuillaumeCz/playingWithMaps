@@ -98,7 +98,8 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
             <div>Point {id}</div>
             {elevation && <div>Elevation: {elevation} </div>}
             <div>
-              {lat.toString().substring(0, 7)}, {lng.toString().substring(0, 7)}
+              Position: {lat.toString().substring(0, 7)},{" "}
+              {lng.toString().substring(0, 7)}
             </div>
             <div>
               <FormGroup>

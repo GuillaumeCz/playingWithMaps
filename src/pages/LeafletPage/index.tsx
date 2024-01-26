@@ -6,26 +6,33 @@ import { useState } from "react";
 import "./leafletPage.css";
 
 const LeafletMapPage = () => {
-  const initialPosition: IPosition = {
-    lat: 45.55724,
-    lng: 6.65187,
-  };
-
-  const initialPoint: IPoint = {
-    id: 1,
-    location: initialPosition,
-    isRadiusVisible: false,
-    radius: 10,
-    elevation: 0,
-  };
-
-  const [points, setPoints] = useState<Array<IPoint>>([
-    initialPoint,
+  const initialLocations: IPosition[] = [
     {
-      ...initialPoint,
-      id: 2,
+      lat: 45.55724,
+      lng: 6.65187,
     },
-  ]);
+    {
+      lat: 45.5564,
+      lng: 6.65973,
+    },
+  ];
+
+  const initialPoints: IPoint[] = [
+    {
+      id: 1,
+      location: initialLocations[0],
+      isRadiusVisible: false,
+      radius: 10,
+    },
+    {
+      id: 2,
+      location: initialLocations[1],
+      isRadiusVisible: false,
+      radius: 10,
+    },
+  ];
+
+  const [points, setPoints] = useState<Array<IPoint>>(initialPoints);
 
   return (
     <>
@@ -34,7 +41,7 @@ const LeafletMapPage = () => {
         <LeafletMap
           points={points}
           onPointsChange={setPoints}
-          mapCenter={initialPosition}
+          mapCenter={initialLocations[0]}
         />
         <LeafletMapCtrl points={points} onPointChange={setPoints} />
       </div>
