@@ -11,6 +11,7 @@ import { IElevation, IPoint, IPosition } from "../../../types";
 import "./LeafletMap.css";
 import DraggableMarker from "./DraggableMarker";
 import { LatLng } from "leaflet";
+import { COLORS } from "../../../shared";
 
 interface ILayer {
   name: string;
@@ -58,14 +59,6 @@ const LeafletMap = ({
 
   const { lat: mapCenterLat, lng: mapCenterLng } = mapCenter;
 
-  const lineLocation: LatLng[] =
-    points.length > 1
-      ? points.map(
-          ({ location: { lat, lng }, elevation }) =>
-            new LatLng(lat, lng, elevation),
-        )
-      : [];
-
   return (
     <>
       <MapContainer center={[mapCenterLat, mapCenterLng]} zoom={16} id={"map"}>
@@ -107,7 +100,31 @@ const LeafletMap = ({
             </div>
           );
         })}
-        {lineLocation.length && <Polyline positions={lineLocation} />}
+        {elevationProfile
+          .map((elevation: IElevation, i) => {
+            if (i !== elevationProfile.length - 1) {
+              const nextPoint = elevationProfile[i + 1];
+              const startPoint: LatLng = new LatLng(
+                elevation.lat,
+                elevation.lng,
+              );
+              const endPoint: LatLng = new LatLng(nextPoint.lat, nextPoint.lng);
+
+              return (
+                <Polyline
+                  positions={[startPoint, endPoint]}
+                  pathOptions={{
+                    color:
+                      elevation.z - nextPoint.z >= 0
+                        ? COLORS.green
+                        : COLORS.red,
+                  }}
+                />
+              );
+            }
+            return null;
+          })
+          .filter((elt) => elt !== null)}
       </MapContainer>
     </>
   );

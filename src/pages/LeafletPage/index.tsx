@@ -45,7 +45,7 @@ const LeafletMapPage = () => {
           return acc + lat + lng;
         }, ""),
     );
-  }, [points]);
+  }, [points, sampling]);
 
   useEffect(() => {
     const fetchData = async () => {
