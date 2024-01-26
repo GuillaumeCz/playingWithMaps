@@ -70,6 +70,20 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
   );
   const distance: number = formattedPoints[0].distanceTo(formattedPoints[1]);
 
+  const series = elevationProfile.map((currentElevation, i) => {
+    const data: number[] | null[] = Array(elevationProfile.length).fill(null);
+    if (i === elevationProfile.length - 1) {
+      data[i] = currentElevation.z;
+    } else {
+      data[i] = currentElevation.z;
+      data[i + 1] = elevationProfile[i + 1].z;
+    }
+    return {
+      data,
+      area: true,
+    };
+  });
+
   return (
     <div id={"leaflet-ctrl"}>
       {points.map(
@@ -145,12 +159,7 @@ const LeafletMapCtrl = ({ points, onPointChange }: ILeafletMapCtrlProps) => {
       </div>
       <LineChart
         xAxis={[{ data: xAxis }]}
-        series={[
-          {
-            data: elevationProfile.map((elevation) => elevation.z),
-            area: true,
-          },
-        ]}
+        series={series}
         width={500}
         height={500}
       />
