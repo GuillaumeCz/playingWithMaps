@@ -2,12 +2,20 @@ import { LineChart } from "@mui/x-charts";
 import { LatLng } from "leaflet";
 import { IElevation } from "../../../types";
 import { COLORS } from "../../../shared";
+import { TextField } from "@mui/material";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface IElevationChart {
   elevationProfile: IElevation[];
+  sampling: number;
+  setSampling: Dispatch<SetStateAction<number>>;
 }
 
-const ElevationChart = ({ elevationProfile }: IElevationChart) => {
+const ElevationChart = ({
+  elevationProfile,
+  setSampling,
+  sampling,
+}: IElevationChart) => {
   const series = elevationProfile.map((currentElevation, i) => {
     const data: number[] | null[] = Array(elevationProfile.length).fill(null);
     let color = COLORS.red;
@@ -36,6 +44,15 @@ const ElevationChart = ({ elevationProfile }: IElevationChart) => {
 
   return (
     <>
+      <div>
+        <TextField
+          id={"sampling"}
+          label={"Sampling"}
+          type={"number"}
+          value={sampling}
+          onChange={(event) => setSampling(Number(event.target.value))}
+        />
+      </div>
       <LineChart
         xAxis={[{ data: xAxis }]}
         series={series}
