@@ -1,7 +1,7 @@
 import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { IPoint } from "../../../types";
-import { getElevations } from "../../../api/altiApi";
+import { getElevations } from "../../../api/IGNApi";
 
 interface IPointInfoProps {
   point: IPoint;

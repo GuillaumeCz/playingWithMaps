@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IElevation, IPosition } from "../types";
 
+const BASE_URL: string = "https://wxs.ign.fr/calcul/alti/rest";
 const locationsToPlayload = (
   locations: IPosition[],
 ): { lat: string; lng: string } =>
@@ -24,7 +25,7 @@ const getElevations = async (
 
   try {
     const response = await axios.get(
-      `https://wxs.ign.fr/calcul/alti/rest/elevation.json?lon=${payload.lng}&lat=${payload.lat}&zonly=true`,
+      `${BASE_URL}/elevation.json?lon=${payload.lng}&lat=${payload.lat}&zonly=true`,
     );
     return response.data.elevations;
   } catch (e) {
@@ -41,7 +42,7 @@ const getElevationProfile = async (
 
   try {
     const response = await axios.get(
-      `https://wxs.ign.fr/calcul/alti/rest/elevationLine.json?sampling=${sampling}&lon=${payload.lng}&lat=${payload.lat}&indent=true`,
+      `${BASE_URL}/elevationLine.json?sampling=${sampling}&lon=${payload.lng}&lat=${payload.lat}&indent=true`,
     );
     return response.data.elevations.map(
       (elevation: { lat: number; z: number; lon: number }) => ({

@@ -4,7 +4,7 @@ import LeafletMapCtrl from "./LeafletMapCtrl";
 import React, { useEffect, useState } from "react";
 
 import "./leafletPage.css";
-import { getElevationProfile } from "../../api/altiApi";
+import { getElevationProfile } from "../../api/IGNApi";
 import ElevationChart from "./ElevationChart";
 
 const initialLocations: IPosition[] = [
