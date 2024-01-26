@@ -6,7 +6,7 @@ import {
   TileLayer,
 } from "react-leaflet";
 import React, { Dispatch, SetStateAction } from "react";
-import { IPoint, IPosition } from "../../../types";
+import { IElevation, IPoint, IPosition } from "../../../types";
 
 import "./LeafletMap.css";
 import DraggableMarker from "./DraggableMarker";
@@ -23,12 +23,14 @@ interface ILeafletMapProps {
   mapCenter: IPosition;
   points: Array<IPoint>;
   onPointsChange: Dispatch<SetStateAction<Array<IPoint>>>;
+  elevationProfile: IElevation[];
 }
 
 const LeafletMap = ({
   mapCenter,
   points,
   onPointsChange,
+  elevationProfile,
 }: ILeafletMapProps) => {
   const layers: ILayer[] = [
     {
