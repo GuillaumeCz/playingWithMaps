@@ -40,7 +40,7 @@ const PointInfo = ({
 
   return (
     <div key={id}>
-      <div>Point {id}</div>
+      <div>{id % 2 === 0 ? "End" : "Start"}</div>
       {elevation && <div>Elevation: {elevation} </div>}
       <div>
         Position: {lat.toString().substring(0, 7)},{" "}

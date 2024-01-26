@@ -1,4 +1,4 @@
-import { Marker } from "react-leaflet";
+import { Marker, Tooltip } from "react-leaflet";
 import React, { useMemo, useRef } from "react";
 import { IPoint, IPosition } from "../../../types";
 
@@ -13,6 +13,7 @@ const DraggableMarker = ({
   const ref = useRef(null);
   const {
     location: { lat, lng },
+    id,
   } = point;
   const handleDrag = useMemo(
     () => ({
@@ -30,7 +31,9 @@ const DraggableMarker = ({
       position={[lat, lng]}
       draggable
       eventHandlers={handleDrag}
-    />
+    >
+      <Tooltip>{id % 2 === 0 ? "End" : "Start"}</Tooltip>
+    </Marker>
   );
 };
 
