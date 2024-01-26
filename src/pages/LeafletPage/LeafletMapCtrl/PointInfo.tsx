@@ -28,9 +28,8 @@ const PointInfo = ({
       );
       const updatedPoints = points.map((point, i) => ({
         ...point,
-        elevation: elv[i],
+        elevation: elv?.length ? elv[i] : 0,
       }));
-      console.log(elv);
       onPointChange(updatedPoints);
     };
 

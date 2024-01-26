@@ -1,15 +1,15 @@
 import {
-  Circle,
   LayersControl,
   MapContainer,
   Polyline,
   TileLayer,
+  useMapEvents,
 } from "react-leaflet";
 import React, { Dispatch, SetStateAction } from "react";
 import { IElevation, IPoint, IPosition } from "../../../types";
 
 import "./LeafletMap.css";
-import DraggableMarker from "./DraggableMarker";
+import DraggableRadiusMarker from "./DraggableRadiusMarker";
 import { LatLng } from "leaflet";
 import { COLORS } from "../../../shared";
 
@@ -48,6 +48,18 @@ const LeafletMap = ({
     },
   ];
 
+  const addPoint = (newPointLocation: IPosition) => {
+    onPointsChange([
+      ...points,
+      {
+        id: points.length,
+        location: newPointLocation,
+        isRadiusVisible: false,
+        radius: 10,
+      },
+    ]);
+  };
+
   const updatePoint = (updatedPointId: number, newPosValue: IPosition) =>
     onPointsChange(
       points.map(({ id, location, ...rest }) => ({
@@ -58,6 +70,17 @@ const LeafletMap = ({
     );
 
   const { lat: mapCenterLat, lng: mapCenterLng } = mapCenter;
+
+  const MarkerAdd = () => {
+    useMapEvents({
+      click(e) {
+        if (points.length < 2) {
+          addPoint(e.latlng);
+        }
+      },
+    });
+    return <></>;
+  };
 
   return (
     <>
@@ -75,31 +98,15 @@ const LeafletMap = ({
             ),
           )}
         </LayersControl>
-        {points.map((point: IPoint) => {
-          const {
-            id,
-            isRadiusVisible,
-            location: { lat, lng },
-            radius,
-          } = point;
-          return (
-            <div key={id}>
-              <DraggableMarker
-                point={point}
-                onPositionChange={(newPointLocation: IPosition) =>
-                  updatePoint(id, newPointLocation)
-                }
-              />
-              {isRadiusVisible && (
-                <Circle
-                  center={[lat, lng]}
-                  pathOptions={{ color: "red" }}
-                  radius={radius}
-                />
-              )}
-            </div>
-          );
-        })}
+        {points.map((point: IPoint) => (
+          <DraggableRadiusMarker
+            key={point.id}
+            point={point}
+            onPositionChange={(newPointLocation: IPosition) =>
+              updatePoint(point.id, newPointLocation)
+            }
+          />
+        ))}
         {elevationProfile
           .map((elevation: IElevation, i) => {
             if (i !== elevationProfile.length - 1) {
@@ -112,6 +119,7 @@ const LeafletMap = ({
 
               return (
                 <Polyline
+                  key={i}
                   positions={[startPoint, endPoint]}
                   pathOptions={{
                     color:
@@ -125,6 +133,7 @@ const LeafletMap = ({
             return null;
           })
           .filter((elt) => elt !== null)}
+        <MarkerAdd />
       </MapContainer>
     </>
   );

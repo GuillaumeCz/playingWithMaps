@@ -1,4 +1,4 @@
-import { IElevation, IPoint, IPosition } from "../../types";
+import { IElevation, IPoint } from "../../types";
 import LeafletMap from "./LeafletMap";
 import LeafletMapCtrl from "./LeafletMapCtrl";
 import React, { useEffect, useState } from "react";
@@ -7,33 +7,10 @@ import "./leafletPage.css";
 import { getElevationProfile } from "../../api/IGNApi";
 import ElevationChart from "./ElevationChart";
 
-const initialLocations: IPosition[] = [
-  {
-    lat: 45.55724,
-    lng: 6.65187,
-  },
-  {
-    lat: 45.5564,
-    lng: 6.65973,
-  },
-];
+const MAP_CENTER = { lat: 45.55724, lng: 6.65187 };
 
-const initialPoints: IPoint[] = [
-  {
-    id: 1,
-    location: initialLocations[0],
-    isRadiusVisible: false,
-    radius: 10,
-  },
-  {
-    id: 2,
-    location: initialLocations[1],
-    isRadiusVisible: false,
-    radius: 10,
-  },
-];
 const LeafletMapPage = () => {
-  const [points, setPoints] = useState<Array<IPoint>>(initialPoints);
+  const [points, setPoints] = useState<Array<IPoint>>([]);
   const [elevationProfile, setElevationProfile] = useState<IElevation[]>([]);
   const [sampling, setSampling] = useState<number>(10);
   const [refreshKey, setRefreshKey] = useState<string>("");
@@ -70,7 +47,7 @@ const LeafletMapPage = () => {
           <LeafletMap
             points={points}
             onPointsChange={setPoints}
-            mapCenter={initialLocations[0]}
+            mapCenter={MAP_CENTER}
             elevationProfile={elevationProfile}
           />
           <LeafletMapCtrl

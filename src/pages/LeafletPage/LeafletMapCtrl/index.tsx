@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IPoint } from "../../../types";
 
 import "./leafletMapCtrl.css";
@@ -15,16 +15,25 @@ const LeafletMapCtrl = ({
   onPointChange,
   refreshKey,
 }: ILeafletMapCtrlProps) => {
-  // Meilleur moyen pour choper la distance ? Reflechir a faire ça en 1 expression, 1 shot
-  const formattedPoints: LatLng[] = points.map(
-    ({ location: { lat, lng }, elevation }) => new LatLng(lat, lng, elevation),
-  );
-  const distance: number = formattedPoints[0].distanceTo(formattedPoints[1]);
+  const [distance, setDistance] = useState<number>(0);
+
+  useEffect(() => {
+    const formattedPoints: LatLng[] = points.map(
+      ({ location: { lat, lng }, elevation }) =>
+        new LatLng(lat, lng, elevation),
+    );
+    const dist: number =
+      formattedPoints.length === 2
+        ? formattedPoints[0].distanceTo(formattedPoints[1])
+        : 0;
+    setDistance(dist);
+  }, [points]);
 
   return (
     <div id={"leaflet-ctrl"}>
-      {points.map((point: IPoint) => (
+      {points.map((point: IPoint, i) => (
         <PointInfo
+          key={i}
           refreshKey={refreshKey}
           point={point}
           points={points}
