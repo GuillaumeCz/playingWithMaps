@@ -6,8 +6,7 @@ import React, { useEffect, useState } from "react";
 import "./leafletPage.css";
 import { getElevationProfile } from "../../api/IGNApi";
 import ElevationChart from "./ElevationChart";
-
-const MAP_CENTER = { lat: 45.55724, lng: 6.65187 };
+import { MAP_CENTER } from "../../shared";
 
 const LeafletMapPage = () => {
   const [points, setPoints] = useState<Array<IPoint>>([]);

@@ -11,7 +11,7 @@ import { IElevation, IPoint, IPosition } from "../../../types";
 import "./LeafletMap.css";
 import DraggableRadiusMarker from "./DraggableRadiusMarker";
 import { LatLng } from "leaflet";
-import { COLORS } from "../../../shared";
+import { COLORS, MAP_ZOOM } from "../../../shared";
 
 interface ILayer {
   name: string;
@@ -84,7 +84,11 @@ const LeafletMap = ({
 
   return (
     <>
-      <MapContainer center={[mapCenterLat, mapCenterLng]} zoom={16} id={"map"}>
+      <MapContainer
+        center={[mapCenterLat, mapCenterLng]}
+        zoom={MAP_ZOOM}
+        id={"map"}
+      >
         <LayersControl>
           {layers.map(
             ({ name, attribution, url, isDefault }: ILayer, index: number) => (
