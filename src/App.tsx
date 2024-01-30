@@ -4,6 +4,7 @@ import Template from "./ template/Template";
 import { RouteObject, useRoutes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LeafletMapPage from "./pages/LeafletPage";
+import OpenLayersPage from "./pages/OpenLayersPage";
 
 const App = () => {
   const pages: RouteObject[] = [
@@ -18,6 +19,10 @@ const App = () => {
         {
           path: "leaflet",
           element: <LeafletMapPage />,
+        },
+        {
+          path: "openLayers",
+          element: <OpenLayersPage />,
         },
       ],
     },

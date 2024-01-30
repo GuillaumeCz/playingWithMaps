@@ -14,6 +14,10 @@ const Template = () => {
       route: "leaflet",
       title: "Leaflet",
     },
+    {
+      route: "openlayers",
+      title: "openlayers",
+    },
   ];
   return (
     <>
