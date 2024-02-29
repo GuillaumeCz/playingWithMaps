@@ -4,6 +4,7 @@ import { IPoint } from "../../../types";
 import "./leafletMapCtrl.css";
 import { LatLng } from "leaflet";
 import PointInfo from "./PointInfo";
+import { Button } from "@mui/material";
 
 interface ILeafletMapCtrlProps {
   points: Array<IPoint>;
@@ -31,6 +32,14 @@ const LeafletMapCtrl = ({
 
   return (
     <div id={"leaflet-ctrl"}>
+      <Button
+        disabled={points.length === 0}
+        onClick={() => {
+          onPointChange([]);
+        }}
+      >
+        Clear
+      </Button>
       {points.map((point: IPoint, i) => (
         <PointInfo
           key={i}
